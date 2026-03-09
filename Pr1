@@ -1,1 +1,108 @@
-printers 
+Description: -
+
+Upsampling is the process of increasing the sampling rate of a signal by inserting additional data points between existing ones to enhance resolution or prepare it for further processing. Upsampling involves increasing the number of pixels in an image to improve its resolution or size, typically through interpolation techniques such as nearest-neighbor, bilinear, or bicubic interpolation.
+
+Downsampling in signal processing involves decreasing the sampling rate by selecting a subset of samples, often achieved through decimation to reduce computational load or storage requirements while preserving essential signal characteristics. Downsampling is the process of reducing the number of samples or pixels in an image or signal, often to decrease file size or computational complexity, typically achieved by discarding some of the original data points or averaging neighboring points.
+
+The Discrete Fourier Transform (DFT) in image processing is a mathematical technique used to convert spatial domain image data into frequency domain representations, revealing the frequency components present in the image. The Fast Fourier Transform (FFT) is an efficient algorithm used in digital signal processing and image processing to compute the Discrete Fourier Transform (DFT) or its inverse rapidly, significantly reducing computational complexity compared to traditional DFT methods.
+
+Code: -
+
+from PIL import Image
+
+from skimage.io import imread, imshow, show import numpy as np
+
+import matplotlib.pylab as pylab import numpy.fft as fp
+
+from skimage.color import rgb2gray im = Image.open('./stock/0.jpeg')
+
+im1 = im.resize((im.width*5,im.height*5),Image.NEAREST)
+
+im2 = im.resize((im.width//15,im.height//15),Image.LANCZOS) freq = fp.fft2(rgb2gray(im))
+
+pylab.subplot(2,2,1) pylab.imshow(im)
+
+pylab.title('Original Image',size=20)
+
+pylab.subplot(2,2,2)
+
+
+
+pylab.imshow(20*np.log10(0.01+np.abs(fp.fftshift(freq)))) pylab.title('DFT Spectrum',size=20)
+
+pylab.subplot(2,2,3) pylab.imshow(im1) pylab.title('Upscaled Image',size=20) pylab.subplot(2,2,4) pylab.imshow(im2)
+
+pylab.title('Downscaled Image',size=20) pylab.show()
+
+Conclusion: -
+
+In conclusion, this practical exercise has successfully demonstrated fundamental aspects of signal processing, focusing on both spatial and frequency domain manipulations. Through the implementation of upsampling and downsampling techniques on image or speech signals, I gained insight into the effects of increasing or decreasing signal resolution. Additionally, the utilization of the Fast Fourier Transform (FFT) showcased an efficient method for computing the Discrete Fourier Transform (DFT), enabling the analysis of signal frequency components. By exploring these concepts, I have acquired valuable hands-on experience in signal processing, laying a solid foundation for further exploration and application in diverse fields such as image and speech processing, communications, and audio engineering.
+
+***************
+Description: -
+
+A triangle wave is a type of waveform characterized by a linear, continuous rise and fall in amplitude over time, resembling the shape of a triangle when plotted on a graph.
+
+A square wave is a type of waveform characterized by a rapid alternation between two distinct voltage levels, typically a high level and a low level, creating a square-shaped pattern when plotted on a graph.
+
+Correlation between signals refers to the degree of similarity or relationship between them, typically quantified by mathematical measures such as Pearson correlation coefficient or cross-correlation function, aiding in tasks like pattern recognition, signal processing, and data analysis.
+
+Mathematical Equation: -
+
+The correlation between two signals x(t) and y(t) can be computed using the cross- correlation function, which is defined as:
+
+𝐶𝑜𝑟𝑟(𝑥, 𝑦)(𝜏) = ∫+∞ 𝑥(𝑡) . 𝑦(𝑡 + 𝜏)𝑑𝑡
+
+where τ is the time shift, and x(t) and y(t) are the signals being correlated.
+
+Code: -
+
+import numpy as np
+
+import matplotlib.pyplot as plt from scipy import signal frequency = 1
+
+duration = 3
+
+sampling_rate = 1000
+
+num_samples = int(duration * sampling_rate)
+
+t = np.linspace(0, duration, num_samples, endpoint=False) triangle_signal = signal.sawtooth(2 * np.pi * frequency * t, width=0.5) plt.figure(figsize=(8, 4))
+
+plt.plot(t, triangle_signal, label='Triangle Signal')
+
+
+
+plt.xlabel('Time (s)') plt.ylabel('Amplitude')
+
+plt.title('3-Period Segment of Triangle Signal') 
+
+plt.xlim(0, 3 / frequency)
+
+plt.grid(True) plt.show()
+
+square_signal = np.sign(np.sin(2 * np.pi * frequency * t)) plt.figure(figsize=(8, 4))
+
+plt.plot(t, square_signal, label='Square Signal') plt.xlabel('Time (s)')
+
+plt.ylabel('Amplitude')
+
+plt.title('3-Period Segment of Square Signal') plt.xlim(0, 3 / frequency)
+
+plt.grid(True) plt.show()
+
+correlation = np.correlate(triangle_signal, square_signal, mode='full') plt.figure(figsize=(8, 4))
+
+plt.plot(correlation) plt.xlabel('Shift') plt.ylabel('Correlation')
+
+plt.title('Cross-correlation between Triangle and Square Signals') plt.grid(True)
+
+plt.show()
+
+Conclusion: -
+
+In conclusion, in this practical we effectively generated a triangle signal, plotted a three-period segment, and computed its correlation with a square signal. Through this exercise, I gained practical experience in signal generation, visualization, and correlation analysis—key components in signal processing.
+
+*******
+
+
