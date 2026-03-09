@@ -104,5 +104,67 @@ Conclusion: -
 In conclusion, in this practical we effectively generated a triangle signal, plotted a three-period segment, and computed its correlation with a square signal. Through this exercise, I gained practical experience in signal generation, visualization, and correlation analysis—key components in signal processing.
 
 *******
+Description: -
+
+Convolution is a mathematical operation where a kernel or filter is applied to an image to compute the weighted sum of pixel values in a neighborhood around each pixel, used for tasks such as blurring, sharpening, edge detection, and feature extraction.
+
+Template matching is a technique used in image processing and computer vision to locate a specific sub-image, known as a template, within a larger image by comparing pixel values and finding areas where the template closely matches portions of the larger image, enabling tasks such as object detection, recognition, and tracking.
+
+Mathematical Equation: -
+
+The mathematical equation for convolution between two signals𝑓(𝑡) and 𝑔(𝑡) is denoted by
+
+(𝑓 ∗ 𝑔)(𝑡) and is defined as
+
+∞
+
+(𝑓 ∗ 𝑔)(𝑡) = ∫  𝑓(𝜏) . 𝑔(𝑡 − 𝜏)𝑑𝜏
+
+−∞
+
+This equation represents the integral of the product of the two signals 𝑓(𝜏) and 𝑔(𝑡 − 𝜏)
+
+w.r.t. 𝜏 .
+
+Code: -
+
+import numpy as np
+
+import matplotlib.pyplot as plt import skimage as ski
+
+from scipy.signal import convolve2d
+
+image = ski.color.rgb2gray(ski.io.imread('./stock/0.jpeg')) template = image[390:445,430:530]
+
+result = ski.feature.match_template(image,template) ij = np.unravel_index(np.argmax(result),result.shape) x,y = ij[::-1]
+
+plt.gray()
+
+fig1 = plt.figure(figsize=(16, 6))
+
+ax1 = plt.subplot(1, 3, 1)
+
+ax2 = plt.subplot(1, 3, 2)
+
+ax3 = plt.subplot(1, 3, 3, sharex=ax2, sharey=ax2) ax1.imshow(template, cmap=plt.cm.gray) ax1.set_title('template')
+
+ax2.imshow(image, cmap=plt.cm.gray) ax2.set_title('image') print(template.shape)
+
+htemp, wtemp = template.shape
+
+rect = plt.Rectangle((x, y), wtemp, htemp, edgecolor='r', facecolor='none') ax2.add_patch(rect)
+
+ax3.imshow(result) ax3.set_title('`match_template`\nresult') ax3.autoscale(False)
+
+ax3.plot(x, y, 'o', markeredgecolor='r', markerfacecolor='none', markersize=10) fig2 = plt.figure(figsize=(10,20))
+
+ax21 = plt.subplot(1,2,1)
+
+ax22 = plt.subplot(1,2,2, sharex=ax21,sharey=ax21) kernel = np.array([[0,1,0],[1,-4,1],[0,1,0]]) edged = np.clip(convolve2d(image,kernel),0,1) ax21.imshow(image,cmap=plt.cm.gray) ax21.set_title('Image') ax22.imshow(edged,cmap=plt.cm.gray) ax22.set_title('Convolved Image')
+
+plt.show()
+
+
+
 
 
